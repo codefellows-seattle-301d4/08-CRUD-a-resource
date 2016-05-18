@@ -98,11 +98,11 @@
     webDB.execute(
       [
         {
-          /* TODO: Update an article instance, overwriting
+          /* DONE: Update an article instance, overwriting
               its properties into the corresponding record in the database: */
           /* Note: this is an advanced admin option, so you will need to test
               out an individual query in the SQL console */
-          'sql': '...;',
+          'sql': 'UPDATE articles SET title = ?, author =?, authorUrl = ?, category = ?, publishedOn = ?, body = ? WHERE id = ?;',
           'data': [this.title, this.author, this.authorUrl, this.category, this.publishedOn, this.body, this.id]
         }
       ],
@@ -114,10 +114,10 @@
     webDB.execute(
       [
         {
-          // TODO: Delete an article instance from the database based on its id:
+          // DONE: Delete an article instance from the database based on its id:
           /* Note: this is an advanced admin option, so you will need to test
               out an individual query in the SQL console */
-          'sql': '...;',
+          'sql': 'DELETE FROM articles WHERE id = ?;',
           'data': [this.id]
         }
       ],
@@ -127,8 +127,8 @@
 
   Article.truncateTable = function(callback) {
     webDB.execute(
-      // TODO: Use correct SQL syntax to delete all records from the articles table.
-      'DELETE ...;', // <----finish the command here, inside the quotes.
+      // DONE: Use correct SQL syntax to delete all records from the articles table.
+      'DELETE FROM articles;', // <----finish the command here, inside the quotes.
       callback
     );
   };
