@@ -23,7 +23,7 @@
   // DONE: Set up a DB table for articles.
   Article.createTable = function(callback) {
     webDB.execute(
-      'CREATE TABLE articles (id INTEGER PRIMARY KEY, title VARCHAR, category VARCHAR, author VARCHAR, authorUrl VARCHAR, publishedOn VARCHAR, body VARCHAR);', // what SQL command do we run here inside these quotes?
+      'CREATE TABLE IF NOT EXISTS articles (id INTEGER PRIMARY KEY, title VARCHAR, category VARCHAR, author VARCHAR, authorUrl VARCHAR, publishedOn VARCHAR, body VARCHAR);', // what SQL command do we run here inside these quotes?
       function(result) {
         console.log('Successfully set up the articles table.', result);
         if (callback) callback();
@@ -60,7 +60,7 @@
           // Save each article from this JSON file, so we don't need to request it next time:
           data.forEach(function(obj) {
             var article = new Article(obj); // This will instantiate an article instance based on each article object from our JSON.
-            /* TODO:
+            /* DONE:
                1 - 'insert' the newly-instantiated article in the DB:
                 (hint: what can we call on each 'article' instance?). */
             article.insertRecord();
@@ -84,9 +84,9 @@
     webDB.execute(
       [
         {
-          // TODO: Insert an article instance into the database:
+          // DONE: Insert an article instance into the database:
           // Note: this method will be called elsewhere after we retrieve our JSON
-          'sql': '...;',
+          'sql': 'INSERT INTO articles (title, author, authorUrl, category, publishedOn, body) VALUES (?, ?, ?, ?, ?, ?);',
           'data': [this.title, this.author, this.authorUrl, this.category, this.publishedOn, this.body]
         }
       ],
