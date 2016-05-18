@@ -23,6 +23,14 @@
   // TODO:DONE Set up a DB table for articles.
   Article.createTable = function(callback) {
     webDB.execute(
+      'DROP TABLE articleData;', // what SQL command do we run here inside these quotes?
+      function(result) {
+        console.log('fuck the table', result);
+        if (callback) callback();
+      }
+    );
+
+    webDB.execute(
       'CREATE TABLE articleData (id INTEGER PRIMARY KEY, title VARCHAR, author VARCHAR, authorUrl VARCHAR, category VARCHAR, publishedOn VARCHAR, body VARCHAR);', // what SQL command do we run here inside these quotes?
       function(result) {
         console.log('Successfully set up the articles table.', result);
@@ -54,7 +62,6 @@
            2 - Pass control to the view by calling the next function that
                 was passed in to Article.fetchAll */
         Article.loadAll(rows);
-        console.log(Article.all);
         next();
       } else {
         $.getJSON('/data/hackerIpsum.json', function(data) {
@@ -72,7 +79,6 @@
             // 1 - Use Article.loadAll to instanitate these rows,
             // 2 - Pass control to the view by calling the next function that was passed in to Article.fetchAll
             Article.loadAll(rows);
-            console.log(Article.all);
             next();
           });
         });
@@ -104,7 +110,7 @@
               its properties into the corresponding record in the database: */
           /* Note: this is an advanced admin option, so you will need to test
               out an individual query in the SQL console */
-          'sql': '...;',
+          'sql': 'UPDATE articleData SET title=?, author=?, authorUrl=?, category=?, publishedOn=?, body=?, id=?;',
           'data': [this.title, this.author, this.authorUrl, this.category, this.publishedOn, this.body, this.id]
         }
       ],
@@ -119,8 +125,9 @@
           // TODO: Delete an article instance from the database based on its id:
           /* Note: this is an advanced admin option, so you will need to test
               out an individual query in the SQL console */
-          'sql': '...;',
+          'sql': 'DELETE FROM articleData WHERE id=?;',
           'data': [this.id]
+          // 'data:': id
         }
       ],
       callback
@@ -130,7 +137,11 @@
   Article.truncateTable = function(callback) {
     webDB.execute(
       // TODO: Use correct SQL syntax to delete all records from the articles table.
-      'DELETE ...;', // <----finish the command here, inside the quotes.
+      [
+        {
+          'sql': 'DELETE FROM articleData'
+        }
+      ], // <----finish the command here, inside the quotes.
       callback
     );
   };
