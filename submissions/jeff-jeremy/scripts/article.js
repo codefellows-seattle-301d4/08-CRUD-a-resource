@@ -23,7 +23,7 @@
   // TODO: Set up a DB table for articles.
   Article.createTable = function(callback) {
     webDB.execute(
-      '...;', // what SQL command do we run here inside these quotes?
+      'CREATE TABLE articles (title VARCHAR PRIMARY KEY, author VARCHAR, authorUrl VARCHAR, publishedOn VARCHAR, body VARCHAR);', // what SQL command do we run here inside these quotes?
       function(result) {
         console.log('Successfully set up the articles table.', result);
         if (callback) callback();
@@ -46,12 +46,14 @@
         (most recent article first!), and then hand off control to the View.
 
       If the DB is empty, we need to retrieve the JSON and process it. */
-    webDB.execute('...', function(rows) { // TODO: fill these quotes to 'select' our table.
+    webDB.execute('SELECT * FROM articles;', function(rows) { // TODO: fill these quotes to 'select' our table.
       if (rows.length) {
         /* TODO:
            1 - Use Article.loadAll to instanitate these rows,
            2 - Pass control to the view by calling the next function that
                 was passed in to Article.fetchAll */
+        Article.loadAll(rows);
+        next();
 
       } else {
         $.getJSON('/data/hackerIpsum.json', function(data) {
@@ -61,13 +63,23 @@
             /* TODO:
                1 - 'insert' the newly-instantiated article in the DB:
                 (hint: what can we call on each 'article' instance?). */
+            webDB.execute(
+              [
+                {
+                  'sql': 'INSERT INTO articles (title, category, author, authorUrl, publishedOn, body) VALUES (?, ?, ?, ?, ?, ?);',
+                  'data': [this.title, this.category, this.author, this.authorUrl, this.publishedOn]
+                }
+              ]
+            );
 
           });
           // Now get ALL the records out the DB, with their database IDs:
-          webDB.execute('', function(rows) { // TODO: select our now full table
+          webDB.execute('SELECT * FROM articles;', function(rows) { // TODO: select our now full table
             // TODO:
             // 1 - Use Article.loadAll to instanitate these rows,
             // 2 - Pass control to the view by calling the next function that was passed in to Article.fetchAll
+            article.loadAll(rows);
+            next();
 
           });
         });
@@ -83,7 +95,7 @@
           // Note: this method will be called elsewhere after we retrieve our JSON
           'sql': '...;',
           'data': [this.title, this.author, this.authorUrl, this.category, this.publishedOn, this.body]
-        } 
+        }
       ],
       callback
     );
