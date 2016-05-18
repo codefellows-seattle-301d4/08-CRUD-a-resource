@@ -20,7 +20,7 @@
     return template(this);
   };
 
-  // TODO: Set up a DB table for articles.
+  // DONE: Set up a DB table for articles.
   Article.createTable = function(callback) {
     webDB.execute(
       'CREATE TABLE articles (id INTEGER PRIMARY KEY, title VARCHAR, category VARCHAR, author VARCHAR, authorUrl VARCHAR, publishedOn VARCHAR, body VARCHAR);', // what SQL command do we run here inside these quotes?
@@ -39,19 +39,21 @@
   };
 
   Article.fetchAll = function(next) {
-    /* TODO: Refactor the .fetchAll() method to check
+    /* DONE: Refactor the .fetchAll() method to check
         if the database holds any records or not.
 
       If the DB has data already, we'll load up the data
         (most recent article first!), and then hand off control to the View.
 
       If the DB is empty, we need to retrieve the JSON and process it. */
-    webDB.execute('...', function(rows) { // TODO: fill these quotes to 'select' our table.
+    webDB.execute('SELECT * FROM articles;', function(rows) { // DONE: fill these quotes to 'select' our table.
       if (rows.length) {
-        /* TODO:
+        /* DONE:
            1 - Use Article.loadAll to instanitate these rows,
            2 - Pass control to the view by calling the next function that
                 was passed in to Article.fetchAll */
+        Article.loadAll(rows);
+        next();
 
       } else {
         $.getJSON('/data/hackerIpsum.json', function(data) {
