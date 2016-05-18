@@ -23,7 +23,7 @@
   // TODO: Set up a DB table for articles.
   Article.createTable = function(callback) {
     webDB.execute(
-      'CREATE TABLE articles (title varchar, category varchar, author varchar, authorUrl varchar, publishedOn varchar, body varchar);', // what SQL command do we run here inside these quotes?
+      'CREATE TABLE articles (id INTEGER PRIMARY KEY, title varchar, category varchar, author varchar, authorUrl varchar, publishedOn varchar, body varchar);', // what SQL command do we run here inside these quotes?
       function(result) {
         console.log('Successfully set up the articles table.', result);
         if (callback) callback();
@@ -95,6 +95,7 @@
   };
 
   Article.prototype.updateRecord = function(callback) {
+    debugger;
     webDB.execute(
       [
         {
@@ -102,7 +103,7 @@
               its properties into the corresponding record in the database: */
           /* Note: this is an advanced admin option, so you will need to test
               out an individual query in the SQL console */
-          'sql': '...;',
+          'sql': 'UPDATE articles SET title=?, author=?, authorUrl=?, category=?, publishedOn=?, body=? WHERE rowid=?;',
           'data': [this.title, this.author, this.authorUrl, this.category, this.publishedOn, this.body, this.id]
         }
       ],
@@ -117,7 +118,7 @@
           // TODO: Delete an article instance from the database based on its id:
           /* Note: this is an advanced admin option, so you will need to test
               out an individual query in the SQL console */
-          'sql': '...;',
+          'sql': 'DELETE FROM articles WHERE rowid=?',
           'data': [this.id]
         }
       ],
@@ -128,7 +129,7 @@
   Article.truncateTable = function(callback) {
     webDB.execute(
       // TODO: Use correct SQL syntax to delete all records from the articles table.
-      'DELETE ...;', // <----finish the command here, inside the quotes.
+      'DELETE FROM articles WHERE id>0;', // <----finish the command here, inside the quotes.
       callback
     );
   };
