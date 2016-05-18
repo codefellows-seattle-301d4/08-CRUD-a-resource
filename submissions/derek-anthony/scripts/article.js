@@ -23,7 +23,7 @@
   // TODO: Set up a DB table for articles.
   Article.createTable = function(callback) {
     webDB.execute(
-      '...;', // what SQL command do we run here inside these quotes?
+      'CREATE TABLE articles (title varchar, category varchar, author varchar, authorUrl varchar, publishedOn varchar, body text);', // what SQL command do we run here inside these quotes?
       function(result) {
         console.log('Successfully set up the articles table.', result);
         if (callback) callback();
@@ -83,7 +83,7 @@
           // Note: this method will be called elsewhere after we retrieve our JSON
           'sql': '...;',
           'data': [this.title, this.author, this.authorUrl, this.category, this.publishedOn, this.body]
-        } 
+        }
       ],
       callback
     );
