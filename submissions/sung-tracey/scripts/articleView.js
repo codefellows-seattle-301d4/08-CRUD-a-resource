@@ -88,7 +88,7 @@
       publishedOn: $('#article-published:checked').length ? util.today() : null
     });
 
-    $('#articles').append(article.toHtml());
+    $('#articles').append(article.toHtml($('#article-template')));
 
     $('pre code').each(function(i, block) {
       hljs.highlightBlock(block);
@@ -101,7 +101,7 @@
 
   articleView.initIndexPage = function() {
     Article.all.forEach(function(a){
-      $('#articles').append(a.toHtml());
+      $('#articles').append(a.toHtml($('#article-template')));
     });
 
     articleView.populateFilters();
