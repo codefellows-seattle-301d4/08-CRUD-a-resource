@@ -20,10 +20,10 @@
     return template(this);
   };
 
-  // TODO: Set up a DB table for articles.
+  // DONE: Set up a DB table for articles.
   Article.createTable = function(callback) {
     webDB.execute(
-      '...;', // what SQL command do we run here inside these quotes?
+      'CREATE TABLE articles(title TEXT, category TEXT, author TEXT, authorUrl TEXT, publishedOn TEXT, body TEXT );', // what SQL command do we run here inside these quotes?
       function(result) {
         console.log('Successfully set up the articles table.', result);
         if (callback) callback();
@@ -39,16 +39,18 @@
   };
 
   Article.fetchAll = function(next) {
-    /* TODO: Refactor the .fetchAll() method to check
+    /* DONE: Refactor the .fetchAll() method to check
         if the database holds any records or not.
 
       If the DB has data already, we'll load up the data
         (most recent article first!), and then hand off control to the View.
 
       If the DB is empty, we need to retrieve the JSON and process it. */
-    webDB.execute('...', function(rows) { // TODO: fill these quotes to 'select' our table.
+    webDB.execute('SELECT * FROM articles', function(rows) { // DONE: fill these quotes to 'select' our table.
       if (rows.length) {
-        /* TODO:
+        Article.load(rows);
+        next();
+        /* DONE:
            1 - Use Article.loadAll to instanitate these rows,
            2 - Pass control to the view by calling the next function that
                 was passed in to Article.fetchAll */
@@ -58,14 +60,17 @@
           // Save each article from this JSON file, so we don't need to request it next time:
           data.forEach(function(obj) {
             var article = new Article(obj); // This will instantiate an article instance based on each article object from our JSON.
-            /* TODO:
+            Article.insertRecord(obj);
+            /* DONE:
                1 - 'insert' the newly-instantiated article in the DB:
                 (hint: what can we call on each 'article' instance?). */
 
           });
           // Now get ALL the records out the DB, with their database IDs:
           webDB.execute('', function(rows) { // TODO: select our now full table
-            // TODO:
+            Article.loadAll(rows);
+            next();
+            // DONE:
             // 1 - Use Article.loadAll to instanitate these rows,
             // 2 - Pass control to the view by calling the next function that was passed in to Article.fetchAll
 
@@ -83,7 +88,7 @@
           // Note: this method will be called elsewhere after we retrieve our JSON
           'sql': '...;',
           'data': [this.title, this.author, this.authorUrl, this.category, this.publishedOn, this.body]
-        } 
+        }
       ],
       callback
     );
