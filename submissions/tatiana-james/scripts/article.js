@@ -63,13 +63,16 @@
             /* TODO:
                1 - 'insert' the newly-instantiated article in the DB:
                 (hint: what can we call on each 'article' instance?). */
+            article.insertRecord();
 
           });
           // Now get ALL the records out the DB, with their database IDs:
-          webDB.execute('', function(rows) { // TODO: select our now full table
-            // TODO:
+          webDB.execute('SELECT * FROM articles;', function(rows) { // DONE: select our now full table
+            // DOne:
             // 1 - Use Article.loadAll to instanitate these rows,
             // 2 - Pass control to the view by calling the next function that was passed in to Article.fetchAll
+            Article.loadAll(rows);
+            next();
 
           });
         });
