@@ -100,7 +100,7 @@
               its properties into the corresponding record in the database: */
           /* Note: this is an advanced admin option, so you will need to test
               out an individual query in the SQL console */
-          'sql': 'UPDATE articles SET title = ?, category = ?, author = ?, authorUrl = ?, publishedOn = ?, body = ?;',
+          'sql': 'UPDATE articles SET title = ?, category = ?, author = ?, authorUrl = ?, publishedOn = ?, body = ? WHERE id = ?;',
           'data': [this.title, this.author, this.authorUrl, this.category, this.publishedOn, this.body, this.id]
         }
       ],
